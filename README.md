@@ -6,4 +6,11 @@ Note: At its core, Manga-Reader is a web crawler. Manga-Downloader does not init
 
 ## Usage
 
+Run download.py to use the program. Inputs such as manga website will be prompted by the program. 
+
+Add a --help argument for more information:
+```bash
+python Downloader.py --help
+```
+
 ## Requirements
