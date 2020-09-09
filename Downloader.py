@@ -13,7 +13,6 @@ HELPMESSAGE = ''' Use the following extensions for more information:
 --supported (gives a list of supported websites)
 '''
 SUPPORTEDSITES = ['https://mangakakalot.com/', 'https://manganelo.com/']
-#variables = []
 
 class Chapter:
     def __init__(self, title, link):
@@ -24,6 +23,10 @@ def crawlForChaptersType1(websiteLink, chapterListElementClassName):
     chapList = []
     chapterListData = requests.get(websiteLink)
     soupData = BeautifulSoup(chapterListData.text, 'html.parser')
+
+    for i in soupData.findAll('div', {'class': 'panel-story-info'}):
+        mangaTitle = i.find_all('h1')[0].getText()
+        break
 
     soupDataElems = soupData.findAll("div", {"class": "panel-story-chapter-list"})[0]
     listElem = soupDataElems.findAll('ul', {"class": "row-content-chapter"})[0]
@@ -37,7 +40,7 @@ def crawlForChaptersType1(websiteLink, chapterListElementClassName):
 
         chapList.append(chapter)
 
-    return chapList
+    return chapList, mangaTitle
 
 def checkAll(variables):
     for i in variables:
@@ -62,11 +65,10 @@ def doGui(cList):
     Button(topBarFrame, text="De-select all chapters", command= lambda: deSelectAll(variables)).pack(side=LEFT, anchor=NW)
     Button(topBarFrame, text="Download", command=master.quit, bg='#00FF00').pack(side=LEFT, anchor=NW)
 
-    listFrame = Frame(master)
+    listFrame = Frame(master, highlightbackground="black", highlightthickness="1")
     canvas = Canvas(listFrame)
     scroll = Scrollbar(listFrame, orient=VERTICAL, command=canvas.yview)
     scrollable_frame = Frame(canvas)
-
     scrollable_frame.bind(
         "<Configure>",
         lambda e: canvas.configure(
@@ -86,8 +88,8 @@ def doGui(cList):
         variables.append(var)
         Checkbutton(scrollable_frame, text=cList[i].title, variable=var).pack(anchor=W)
 
-    listFrame.pack(anchor=W, padx=4, fill=X)
-    canvas.pack(side=LEFT, fill=Y, expand=True)
+    listFrame.pack(anchor=W, padx=4, pady=10, fill=X)
+    canvas.pack(side=LEFT, pady=2, fill=Y, expand=True)
     scroll.pack(side=RIGHT, fill=Y)
 
 
@@ -130,9 +132,11 @@ if __name__ == '__main__':
     websiteLink = input('\nWhat is the link of the Manga you would like to download (Website with of the chapter list of the manga): ')
 
     if 'manganelo' in websiteLink: #Type 1
-        chapterList = crawlForChaptersType1(websiteLink, 'panel-story-chapter-list')
+        chapterList, title = crawlForChaptersType1(websiteLink, 'panel-story-chapter-list')
 
         chaptersToDownload = doGui(chapterList)
+
+        print(title)
 
         #TODO fetch images and make into pdf
 
