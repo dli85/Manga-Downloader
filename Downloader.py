@@ -2,6 +2,7 @@ import sys
 from bs4 import BeautifulSoup
 import requests
 import tkinter
+import fpdf
 
 cmdUsed = False
 HELPMESSAGE = ''' Use the following extensions for more information:
