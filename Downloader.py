@@ -15,7 +15,7 @@ HELPMESSAGE = ''' Use the following extensions for more information:
 
 --supported (gives a list of supported websites)
 '''
-SUPPORTEDSITES = ['https://mangakakalot.com/', 'https://manganelo.com/']
+SUPPORTEDSITES = []
 
 class Chapter:
     def __init__(self, title, link):
