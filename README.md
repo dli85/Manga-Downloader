@@ -1,6 +1,4 @@
-# Manga-Downloader
-
-Manga-Downloader is an app that allows you to easily track manga's.
+# Manga-Tracker
 
 ## Usage
 
